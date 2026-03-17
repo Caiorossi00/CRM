@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MVP</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Cadastro de Cliente</h1>
+
+    <div class="form">
+      <input type="text" id="nome" placeholder="Nome do cliente" />
+      <input type="text" id="cpf" placeholder="CPF" />
+      <button onclick="abrirModal()">Gerar Ação</button>
+    </div>
+
+    <div id="modal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Checklist do Caso</h2>
+
+        <label>
+          <input type="checkbox" id="lesao" />
+          Houve lesão corporal
+        </label>
+
+        <label>
+          <input type="checkbox" id="boletim" />
+          Existe boletim de ocorrência
+        </label>
+
+        <label>
+          <input type="checkbox" id="culpa" />
+          Culpa do réu confirmada
+        </label>
+
+        <div class="modal-buttons">
+          <button onclick="gerarDocumento()">Gerar</button>
+          <button onclick="fecharModal()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <h2>Ação:</h2>
+    <pre id="resultado"></pre>
+
+    <script src="script.js"></script>
+  </body>
+</html>
