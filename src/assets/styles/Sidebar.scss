@@ -1,0 +1,22 @@
+#sidebar-container {
+  width: fit-content;
+  background-color: yellow;
+  padding-right: 4vw;
+  padding-left: 3vw;
+  padding-top: 5vh;
+
+  h1 {
+    margin-bottom: 4vh;
+  }
+}
+
+.bar-btn {
+  display: flex;
+  align-items: centerx;
+  gap: 10px;
+
+  button {
+    border: none;
+    background-color: transparent;
+  }
+}

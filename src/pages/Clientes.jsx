@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Modal from "./components/Modal";
-import ClienteForm from "./components/ClienteForm";
+import Modal from "../components/Modal";
+import ClienteForm from "../components/ClienteForm";
 import "../assets/styles/Clientes.scss";
 
 export default function Clientes() {
