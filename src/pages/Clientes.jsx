@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import { formatarData } from "../utils/dateUtils";
 import Modal from "../components/Modal";
 import ClienteForm from "../components/ClienteForm";
 import "../assets/styles/Clientes.scss";
@@ -29,15 +30,6 @@ export default function Clientes() {
     document.addEventListener("mousedown", handleClickFora);
     return () => document.removeEventListener("mousedown", handleClickFora);
   }, []);
-
-  function formatarData(data) {
-    if (!data) return "";
-    const d = new Date(data);
-    const dia = String(d.getDate()).padStart(2, "0");
-    const mes = String(d.getMonth() + 1).padStart(2, "0");
-    const ano = d.getFullYear();
-    return `${dia}/${mes}/${ano}`;
-  }
 
   function salvarClientes(novos) {
     setClientes(novos);
