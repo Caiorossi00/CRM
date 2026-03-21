@@ -1,10 +1,17 @@
 export function formatarData(data) {
   if (!data) return "—";
-  if (data.includes("/")) return data;
-  const d = new Date(data);
-  if (isNaN(d)) return "—";
-  const dia = String(d.getDate()).padStart(2, "0");
-  const mes = String(d.getMonth() + 1).padStart(2, "0");
-  const ano = d.getFullYear();
-  return `${dia}/${mes}/${ano}`;
+
+  if (typeof data === "string") {
+    if (data.includes("/")) return data;
+    const d = new Date(data);
+    if (isNaN(d)) return "—";
+    return d.toLocaleDateString("pt-BR");
+  }
+
+  if (data instanceof Date) {
+    if (isNaN(data)) return "—";
+    return data.toLocaleDateString("pt-BR");
+  }
+
+  return "—";
 }
