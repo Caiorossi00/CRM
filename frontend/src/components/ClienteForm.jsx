@@ -22,40 +22,65 @@ const CAMPOS_INICIAIS = {
 };
 
 const CAMPOS = [
-  { name: "nome", type: "text", placeholder: "Nome completo", required: true },
+  { name: "nome", label: "Nome", type: "text", required: true },
   {
     name: "telefone",
+    label: "Telefone/WhatsApp",
     type: "text",
-    placeholder: "Telefone/WhatsApp",
     required: true,
   },
-  { name: "ultimoContato", type: "date" },
+  { name: "ultimoContato", label: "Último contato", type: "date" },
   {
     name: "formaProspeccao",
+    label: "Forma de prospecção",
     type: "select",
     options: FORMAS_PROSPECCAO,
-    placeholder: "Forma de prospecção",
   },
   {
     name: "areaAtuacao",
+    label: "Área de atuação",
     type: "select",
     options: AREAS_ATUACAO,
-    placeholder: "Área de atuação",
   },
-  {
-    name: "resumoDemanda",
-    type: "textarea",
-    placeholder: "Resumo da demanda",
-  },
-  {
-    name: "resumoUltimaTratativa",
-    type: "textarea",
-    placeholder: "Resumo da última tratativa",
-  },
+  { name: "resumoDemanda", label: "Resumo da demanda", type: "textarea" },
   {
     name: "motivoNaoContratado",
+    label: "Motivo de não contratação",
     type: "textarea",
-    placeholder: "Se não contratou, qual o motivo?",
+  },
+];
+
+const TRATATIVAS = [
+  {
+    label: "Qualificação inicial",
+    value: "Qualificação",
+    className: "tratativa-qualificacao",
+  },
+  { label: "Proposta", value: "Proposta", className: "tratativa-proposta" },
+  {
+    label: "Contratação",
+    value: "Contratacao",
+    className: "tratativa-contratacao",
+  },
+  {
+    label: "Fechado (Advocacia)",
+    value: "Fechado (advocacia)",
+    className: "tratativa-fechado-advocacia",
+  },
+  {
+    label: "Fechado (Consultoria)",
+    value: "Fechado (consultoria)",
+    className: "tratativa-fechado-consultoria",
+  },
+  {
+    label: "Oportunidade perdida",
+    value: "Oportunidade Perdida",
+    className: "tratativa-oportunidade-perdida",
+  },
+  {
+    label: "Encaminhado p/ parceria",
+    value: "Encaminhado p/ Parceria",
+    className: "tratativa-encaminhado-parceria",
   },
 ];
 
@@ -65,7 +90,6 @@ export default function ClienteForm({ onSubmit, clienteInicial }) {
       ? { ...CAMPOS_INICIAIS, ...clienteInicial }
       : CAMPOS_INICIAIS,
   );
-
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -78,13 +102,11 @@ export default function ClienteForm({ onSubmit, clienteInicial }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     if (!form.nome || !form.telefone) return;
 
     try {
       setLoading(true);
       setError(null);
-
       await onSubmit(form);
     } catch (err) {
       setError(err.message);
@@ -94,56 +116,94 @@ export default function ClienteForm({ onSubmit, clienteInicial }) {
   }
 
   function renderCampo(campo) {
+    const id = campo.name;
+
+    if (campo.name === "resumoUltimaTratativa") {
+      return (
+        <div className="form-group">
+          <label htmlFor={id}>{campo.label}</label>
+          <select
+            id={id}
+            name={campo.name}
+            value={form[campo.name]}
+            onChange={handleChange}
+          >
+            <option value="" disabled>
+              Selecione
+            </option>
+            {TRATATIVAS.map((t) => (
+              <option key={t.value} value={t.value} className={t.className}>
+                {t.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      );
+    }
+
     if (campo.type === "select") {
       return (
-        <select
-          name={campo.name}
-          value={form[campo.name]}
-          onChange={handleChange}
-        >
-          <option value="">{campo.placeholder}</option>
-          {campo.options.map((op) => (
-            <option key={op} value={op}>
-              {op}
+        <div className="form-group">
+          <label htmlFor={id}>{campo.label}</label>
+          <select
+            id={id}
+            name={campo.name}
+            value={form[campo.name]}
+            onChange={handleChange}
+          >
+            <option value="" disabled>
+              Selecione
             </option>
-          ))}
-        </select>
+            {campo.options.map((op) => (
+              <option key={op} value={op}>
+                {op}
+              </option>
+            ))}
+          </select>
+        </div>
       );
     }
 
     if (campo.type === "textarea") {
       return (
-        <textarea
-          name={campo.name}
-          placeholder={campo.placeholder}
-          value={form[campo.name]}
-          onChange={handleChange}
-        />
+        <div className="form-group">
+          <label htmlFor={id}>{campo.label}</label>
+          <textarea
+            id={id}
+            name={campo.name}
+            value={form[campo.name]}
+            onChange={handleChange}
+          />
+        </div>
       );
     }
 
     return (
-      <input
-        type={campo.type}
-        name={campo.name}
-        placeholder={campo.placeholder}
-        value={form[campo.name]}
-        onChange={handleChange}
-        required={campo.required}
-      />
+      <div className="form-group">
+        <label htmlFor={id}>{campo.label}</label>
+        <input
+          id={id}
+          type={campo.type}
+          name={campo.name}
+          value={form[campo.name]}
+          onChange={handleChange}
+          required={campo.required}
+        />
+      </div>
     );
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>{isEdicao ? "Editar Cliente" : "Novo Cliente"}</h2>
-
       {error && <p className="form-error">{error}</p>}
-
-      {CAMPOS.map((campo) => (
+      {CAMPOS.concat({
+        name: "resumoUltimaTratativa",
+        label: "Resumo da Última Tratativa",
+        type: "select",
+      }).map((campo) => (
         <div key={campo.name}>{renderCampo(campo)}</div>
       ))}
-
       <button type="submit" disabled={loading}>
         {loading ? "Salvando..." : isEdicao ? "Atualizar" : "Salvar"}
       </button>

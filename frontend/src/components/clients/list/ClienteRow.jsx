@@ -1,6 +1,16 @@
-import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { formatarData } from "../../../utils/dateUtils";
+
+const TRATATIVAS = {
+  Qualificação: "#00BCD4",
+  Proposta: "#6d03d1",
+  Contratacao: "#4d463a",
+  "Fechado (advocacia)": "#246e1d",
+  "Fechado (consultoria)": "#246e1d",
+  "Oportunidade Perdida": "#f13a2d",
+  "Encaminhado p/ Parceria": "#d8c976",
+};
 
 export default function ClienteRow({ cliente, onEditar, onExcluir }) {
   const [menuAberto, setMenuAberto] = useState(false);
@@ -16,6 +26,8 @@ export default function ClienteRow({ cliente, onEditar, onExcluir }) {
     return () => document.removeEventListener("mousedown", handleClickFora);
   }, []);
 
+  const corTratativa = TRATATIVAS[cliente.resumoUltimaTratativa] || "#ccc";
+
   return (
     <tr>
       <td>
@@ -26,7 +38,20 @@ export default function ClienteRow({ cliente, onEditar, onExcluir }) {
       <td>{cliente.formaProspeccao}</td>
       <td>{cliente.areaAtuacao}</td>
       <td className="td-resumo">{cliente.resumoDemanda}</td>
-      <td className="td-resumo">{cliente.resumoUltimaTratativa}</td>
+      <td className="td-resumo">
+        <div
+          className="tratativa-quadrado"
+          style={{
+            backgroundColor: corTratativa,
+            width: "12px",
+            height: "12px",
+            display: "inline-block",
+            marginRight: "6px",
+            borderRadius: "2px",
+          }}
+        />
+        {cliente.resumoUltimaTratativa}
+      </td>
       <td className="td-resumo">{cliente.motivoNaoContratado}</td>
       <td className="acoes-cell">
         <div className="menu-wrapper" ref={menuRef}>
@@ -36,7 +61,6 @@ export default function ClienteRow({ cliente, onEditar, onExcluir }) {
           >
             ···
           </button>
-
           {menuAberto && (
             <div className="menu-dropdown">
               <button onClick={() => onEditar(cliente)}>Editar</button>

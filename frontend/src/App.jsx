@@ -3,6 +3,7 @@ import Sidebar from "./components/Sidebar";
 import Clientes from "./pages/ClientesLista";
 import ClienteDetalhe from "./pages/ClienteDetalhe";
 import "./App.css";
+import Mural from "./pages/Mural";
 
 export default function App() {
   return (
@@ -14,7 +15,7 @@ export default function App() {
             <Route path="/" element={<Navigate to="/clientes" />} />
             <Route path="/clientes" element={<Clientes />} />
             <Route path="/clientes/:id" element={<ClienteDetalhe />} />
-            <Route path="/acoes" element={<h1>Ações</h1>} />
+            <Route path="/mural" element={<Mural />} />
             <Route path="/configuracoes" element={<h1>Configurações</h1>} />
           </Routes>
         </div>
