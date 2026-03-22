@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-import { formatarData } from "../../utils/dateUtils";
+import { formatarData } from "../../../utils/dateUtils";
 
 export default function ClienteRow({ cliente, onEditar, onExcluir }) {
   const [menuAberto, setMenuAberto] = useState(false);

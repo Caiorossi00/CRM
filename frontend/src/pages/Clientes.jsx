@@ -1,10 +1,10 @@
 import { useState } from "react";
 import Modal from "../components/Modal";
 import ClienteForm from "../components/ClienteForm";
-import ClientesHeader from "../components/clientes/ClientesHeader";
-import ClientesToolbar from "../components/clientes/ClientesToolbar";
-import ClientesTable from "../components/clientes/ClientesTable";
-import ClientesFooter from "../components/clientes/ClientesFooter";
+import ClientesHeader from "../components/clients/list/ClientesHeader";
+import ClientesToolbar from "../components/clients/list/ClientesToolbar";
+import ClientesTable from "../components/clients/list/ClientesTable";
+import ClientesFooter from "../components/clients/list/ClientesFooter";
 import useClientes from "../hooks/useClientes";
 import "../assets/styles/Clientes.scss";
 

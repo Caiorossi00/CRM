@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { formatarData } from "../../utils/dateUtils";
+import { formatarData } from "../../../utils/dateUtils";
 
 export default function ClienteHeader({ cliente }) {
   return (

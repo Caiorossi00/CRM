@@ -1,4 +1,4 @@
-import { formatarData } from "../../utils/dateUtils";
+import { formatarData } from "../../../utils/dateUtils";
 
 export default function ClienteInfoCard({ titulo, campos }) {
   return (

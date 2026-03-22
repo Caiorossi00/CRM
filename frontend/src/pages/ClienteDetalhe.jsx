@@ -1,9 +1,9 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ClienteHeader from "../components/cliente/ClienteHeader";
-import ClienteInfoCard from "../components/cliente/ClienteInfoCard";
-import ClienteResumoCard from "../components/cliente/ClienteResumoCard";
-import ClienteAcao from "../components/cliente/ClienteAcao";
+import ClienteHeader from "../components/clients/details/ClienteHeader";
+import ClienteInfoCard from "../components/clients/details/ClienteInfoCard";
+import ClienteResumoCard from "../components/clients/details/ClienteResumoCard";
+import ClienteAcao from "../components/clients/details/ClienteAcao";
 import "../assets/styles/ClienteDetalhe.scss";
 
 export default function ClienteDetalhe() {
