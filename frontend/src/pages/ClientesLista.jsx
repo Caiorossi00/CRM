@@ -14,7 +14,7 @@ export default function Clientes() {
   const { clientes, adicionarCliente, editarCliente, removerCliente } =
     useClientes();
   const [busca, setBusca] = useState("");
-  const [filtros, setFiltros] = useState([]);
+  const [filtros, setFiltros] = useState({});
   const [pagina, setPagina] = useState(1);
   const [modalAberto, setModalAberto] = useState(false);
   const [clienteEditando, setClienteEditando] = useState(null);
@@ -23,8 +23,11 @@ export default function Clientes() {
     const passaBusca =
       c.nome?.toLowerCase().includes(busca.toLowerCase()) ||
       c.telefone?.includes(busca);
-    const passaFiltro =
-      filtros.length === 0 || filtros.includes(c.resumoUltimaTratativa);
+
+    const passaFiltro = Object.entries(filtros).every(
+      ([campo, valores]) => valores.length === 0 || valores.includes(c[campo]),
+    );
+
     return passaBusca && passaFiltro;
   });
 

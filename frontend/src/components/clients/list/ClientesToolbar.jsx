@@ -1,6 +1,28 @@
 import { useState } from "react";
-import { TRATATIVAS } from "../../../assets/data/clienteData";
+import {
+  TRATATIVAS,
+  FORMAS_PROSPECCAO,
+  AREAS_ATUACAO,
+} from "../../../assets/data/clienteData";
 import "../../../assets/styles/ClientesToolbar.scss";
+
+const GRUPOS_FILTRO = [
+  {
+    label: "Tratativa",
+    campo: "resumoUltimaTratativa",
+    opcoes: TRATATIVAS.map((t) => ({ label: t.label, value: t.value })),
+  },
+  {
+    label: "Forma de Prospecção",
+    campo: "formaProspeccao",
+    opcoes: FORMAS_PROSPECCAO.map((f) => ({ label: f, value: f })),
+  },
+  {
+    label: "Área de Atuação",
+    campo: "areaAtuacao",
+    opcoes: AREAS_ATUACAO.map((a) => ({ label: a, value: a })),
+  },
+];
 
 export default function ClientesToolbar({
   busca,
@@ -15,15 +37,23 @@ export default function ClientesToolbar({
     setBusca(e.target.value);
   }
 
-  function toggleFiltro(value) {
-    setFiltros((prev) =>
-      prev.includes(value) ? prev.filter((f) => f !== value) : [...prev, value],
-    );
+  function toggleFiltro(campo, value) {
+    setFiltros((prev) => {
+      const atual = prev[campo] || [];
+      return {
+        ...prev,
+        [campo]: atual.includes(value)
+          ? atual.filter((f) => f !== value)
+          : [...atual, value],
+      };
+    });
   }
 
   function limparFiltros() {
-    setFiltros([]);
+    setFiltros({});
   }
+
+  const totalAtivos = Object.values(filtros).flat().length;
 
   return (
     <div className="clientes-toolbar">
@@ -40,30 +70,37 @@ export default function ClientesToolbar({
         </button>
         <div className="filtro-wrapper">
           <button
-            className={`btn-filtros ${filtros.length > 0 ? "btn-filtros--ativo" : ""}`}
+            className={`btn-filtros ${totalAtivos > 0 ? "btn-filtros--ativo" : ""}`}
             onClick={() => setFiltroAberto(!filtroAberto)}
           >
-            Filtros {filtros.length > 0 && `(${filtros.length})`}
+            Filtros {totalAtivos > 0 && `(${totalAtivos})`}
           </button>
           {filtroAberto && (
             <div className="filtro-dropdown">
               <div className="filtro-header">
-                <span>Tratativa</span>
-                {filtros.length > 0 && (
+                <span>Filtros</span>
+                {totalAtivos > 0 && (
                   <button onClick={limparFiltros} className="filtro-limpar">
-                    Limpar
+                    Limpar tudo
                   </button>
                 )}
               </div>
-              {TRATATIVAS.map((t) => (
-                <label key={t.value} className="filtro-item">
-                  <input
-                    type="checkbox"
-                    checked={filtros.includes(t.value)}
-                    onChange={() => toggleFiltro(t.value)}
-                  />
-                  {t.label}
-                </label>
+              {GRUPOS_FILTRO.map((grupo) => (
+                <div key={grupo.campo} className="filtro-grupo">
+                  <p className="filtro-grupo-label">{grupo.label}</p>
+                  {grupo.opcoes.map((op) => (
+                    <label key={op.value} className="filtro-item">
+                      <input
+                        type="checkbox"
+                        checked={(filtros[grupo.campo] || []).includes(
+                          op.value,
+                        )}
+                        onChange={() => toggleFiltro(grupo.campo, op.value)}
+                      />
+                      {op.label}
+                    </label>
+                  ))}
+                </div>
               ))}
             </div>
           )}

@@ -34,6 +34,12 @@
   }
 }
 
+.clientes-toolbar-actions {
+  display: flex;
+  gap: 10px;
+  flex-direction: row-reverse;
+}
+
 .filtro-wrapper {
   position: relative;
 }
@@ -101,6 +107,25 @@
   }
 }
 
+.filtro-grupo {
+  padding: 8px 0 4px;
+  border-bottom: 1px solid #f3f4f6;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.filtro-grupo-label {
+  padding: 0 14px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+  margin: 0;
+}
+
 .filtro-item {
   display: flex;
   align-items: center;
@@ -118,10 +143,4 @@
     cursor: pointer;
     accent-color: #2563eb;
   }
-}
-
-.clientes-toolbar-actions {
-  display: flex;
-  gap: 10px;
-  flex-direction: row-reverse;
 }
