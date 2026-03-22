@@ -32,7 +32,7 @@ export default function validarCliente(req, res, next) {
 
   const numeros = telefone.replace(/\D/g, "");
 
-  if (numeros.length < 8) {
+  if (numeros.length < 4) {
     return res.status(400).json({ erro: "Telefone inválido" });
   }
 
