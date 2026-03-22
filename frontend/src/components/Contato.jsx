@@ -1,11 +1,16 @@
-import React from "react";
 import { gerarLinkWhatsApp } from "../utils/whatsapp";
+import "../assets/styles/ClienteRow.scss";
 
 export default function Contato({ telefone }) {
   const link = gerarLinkWhatsApp(telefone);
 
   return (
-    <a href={link} target="_blank" rel="noopener noreferrer">
+    <a
+      className="telefone"
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       {telefone}
     </a>
   );

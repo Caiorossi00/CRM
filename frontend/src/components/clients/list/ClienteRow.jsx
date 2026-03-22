@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { formatarData } from "../../../utils/dateUtils";
+import Contato from "../../../components/Contato";
+import "../../../assets/styles/ClienteRow.scss";
 
 const TRATATIVAS = {
   Qualificação: "#00BCD4",
@@ -33,7 +35,9 @@ export default function ClienteRow({ cliente, onEditar, onExcluir }) {
       <td>
         <Link to={`/clientes/${cliente.id}`}>{cliente.nome}</Link>
       </td>
-      <td>{cliente.telefone}</td>
+      <td>
+        <Contato telefone={cliente.telefone} />
+      </td>
       <td>{formatarData(cliente.ultimoContato)}</td>
       <td>{cliente.formaProspeccao}</td>
       <td>{cliente.areaAtuacao}</td>
