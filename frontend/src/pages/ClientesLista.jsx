@@ -13,20 +13,22 @@ const ITENS_POR_PAGINA = 10;
 export default function Clientes() {
   const { clientes, adicionarCliente, editarCliente, removerCliente } =
     useClientes();
-
   const [busca, setBusca] = useState("");
+  const [filtros, setFiltros] = useState([]);
   const [pagina, setPagina] = useState(1);
   const [modalAberto, setModalAberto] = useState(false);
   const [clienteEditando, setClienteEditando] = useState(null);
 
-  const clientesFiltrados = clientes.filter(
-    (c) =>
+  const clientesFiltrados = clientes.filter((c) => {
+    const passaBusca =
       c.nome?.toLowerCase().includes(busca.toLowerCase()) ||
-      c.telefone?.includes(busca),
-  );
+      c.telefone?.includes(busca);
+    const passaFiltro =
+      filtros.length === 0 || filtros.includes(c.resumoUltimaTratativa);
+    return passaBusca && passaFiltro;
+  });
 
   const totalPaginas = Math.ceil(clientesFiltrados.length / ITENS_POR_PAGINA);
-
   const clientesPagina = clientesFiltrados.slice(
     (pagina - 1) * ITENS_POR_PAGINA,
     pagina * ITENS_POR_PAGINA,
@@ -35,26 +37,24 @@ export default function Clientes() {
   return (
     <div className="clientes-page">
       <ClientesHeader />
-
       <ClientesToolbar
         busca={busca}
         setBusca={setBusca}
         abrirModal={() => setModalAberto(true)}
+        filtros={filtros}
+        setFiltros={setFiltros}
       />
-
       <ClientesTable
         clientes={clientesPagina}
         onEditar={(c) => setClienteEditando(c)}
         onExcluir={removerCliente}
       />
-
       <ClientesFooter
         pagina={pagina}
         setPagina={setPagina}
         totalPaginas={totalPaginas}
         totalItens={clientesFiltrados.length}
       />
-
       {modalAberto && (
         <Modal fechar={() => setModalAberto(false)}>
           <ClienteForm
@@ -65,7 +65,6 @@ export default function Clientes() {
           />
         </Modal>
       )}
-
       {clienteEditando && (
         <Modal fechar={() => setClienteEditando(null)}>
           <ClienteForm
