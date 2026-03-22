@@ -1,40 +1,42 @@
 import { useEffect, useState } from "react";
+import {
+  getClientes,
+  criarCliente,
+  atualizarCliente,
+  deletarCliente,
+} from "../services/clientesService";
 
 export default function useClientes() {
   const [clientes, setClientes] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   async function buscarClientes() {
-    const res = await fetch("http://localhost:3000/clientes");
-    const data = await res.json();
-    setClientes(data);
+    try {
+      setLoading(true);
+      setError(null);
+
+      const data = await getClientes();
+      setClientes(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function adicionarCliente(cliente) {
-    await fetch("http://localhost:3000/clientes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(cliente),
-    });
+    await criarCliente(cliente);
     await buscarClientes();
   }
 
   async function editarCliente(cliente) {
-    await fetch(`http://localhost:3000/clientes/${cliente.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(cliente),
-    });
+    await atualizarCliente(cliente);
     await buscarClientes();
   }
 
   async function removerCliente(id) {
-    await fetch(`http://localhost:3000/clientes/${id}`, {
-      method: "DELETE",
-    });
+    await deletarCliente(id);
     await buscarClientes();
   }
 
@@ -44,7 +46,8 @@ export default function useClientes() {
 
   return {
     clientes,
-    buscarClientes,
+    loading,
+    error,
     adicionarCliente,
     editarCliente,
     removerCliente,

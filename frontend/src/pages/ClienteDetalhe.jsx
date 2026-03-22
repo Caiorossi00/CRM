@@ -4,17 +4,48 @@ import ClienteHeader from "../components/clients/details/ClienteHeader";
 import ClienteInfoCard from "../components/clients/details/ClienteInfoCard";
 import ClienteResumoCard from "../components/clients/details/ClienteResumoCard";
 import ClienteAcao from "../components/clients/details/ClienteAcao";
+import { getClienteById } from "../services/clientesService";
 import "../assets/styles/ClienteDetalhe.scss";
 
 export default function ClienteDetalhe() {
   const { id } = useParams();
   const [cliente, setCliente] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/clientes/${id}`)
-      .then((res) => res.json())
-      .then((data) => setCliente(data));
+    async function carregarCliente() {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const data = await getClienteById(id);
+        setCliente(data);
+      } catch (err) {
+        setError(err.message);
+        setCliente(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    carregarCliente();
   }, [id]);
+
+  if (loading) {
+    return <p>Carregando...</p>;
+  }
+
+  if (error) {
+    return (
+      <div className="detalhe-page">
+        <p className="detalhe-nao-encontrado">Erro: {error}</p>
+        <Link to="/clientes" className="detalhe-voltar">
+          ← Voltar
+        </Link>
+      </div>
+    );
+  }
 
   if (!cliente) {
     return (

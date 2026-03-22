@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
-import Clientes from "./pages/Clientes";
+import Clientes from "./pages/ClientesLista";
 import ClienteDetalhe from "./pages/ClienteDetalhe";
 import "./App.css";
 
