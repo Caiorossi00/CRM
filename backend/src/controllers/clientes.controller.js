@@ -38,5 +38,5 @@ export function atualizarCliente(req, res) {
 
 export function removerCliente(req, res) {
   deleteCliente(req.params.id);
-  res.json({ mensagem: "Cliente removido" });
+  res.status(204).end();
 }

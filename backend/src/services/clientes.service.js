@@ -43,16 +43,15 @@ export function createCliente(data) {
 export function updateCliente(id, data) {
   const clientes = lerClientes();
   const index = clientes.findIndex((c) => c.id === Number(id));
-
   if (index === -1) return null;
+
+  const { id: _id, dataCadastro: _dataCadastro, ...dadosPermitidos } = data;
 
   clientes[index] = {
     ...clientes[index],
-    ...data,
+    ...dadosPermitidos,
   };
-
   salvarClientes(clientes);
-
   return clientes[index];
 }
 
