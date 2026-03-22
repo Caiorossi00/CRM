@@ -79,7 +79,7 @@ export default function ClientesToolbar({
     <div className="clientes-toolbar">
       <input
         type="text"
-        placeholder="Pesquisar cliente..."
+        placeholder="Pesquisar cliente por nome..."
         value={busca}
         onChange={handleBusca}
         className="clientes-search"

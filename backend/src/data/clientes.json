@@ -8,7 +8,7 @@
     "formaProspeccao": "Youtube",
     "areaAtuacao": "Acidente",
     "resumoDemanda": "O cliente lorem ipsum simet dolor",
-    "resumoUltimaTratativa": "Proposta",
+    "resumoUltimaTratativa": "Contratacao",
     "motivoNaoContratado": "Não enviou os arquivos",
     "dataCadastro": "2026-03-22T12:49:48.763Z"
   },
@@ -193,5 +193,18 @@
     "resumoUltimaTratativa": "Proposta",
     "motivoNaoContratado": "",
     "dataCadastro": "2026-03-22T14:15:33.543Z"
+  },
+  {
+    "id": 1774187827998,
+    "nome": "Caio Rossi",
+    "telefone": "1028310923",
+    "primeiroContato": "",
+    "ultimoContato": "2026-03-11",
+    "formaProspeccao": "Indicação",
+    "areaAtuacao": "PSDD",
+    "resumoDemanda": "ODIjewoijdoiwej",
+    "resumoUltimaTratativa": "Proposta",
+    "motivoNaoContratado": "Receio de golpe",
+    "dataCadastro": "2026-03-22T13:57:07.998Z"
   }
 ]
