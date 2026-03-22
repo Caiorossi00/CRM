@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   TRATATIVAS,
   FORMAS_PROSPECCAO,
@@ -24,6 +24,15 @@ const GRUPOS_FILTRO = [
   },
 ];
 
+function carregarFiltros() {
+  try {
+    const salvo = localStorage.getItem("clientes-filtros");
+    return salvo ? JSON.parse(salvo) : {};
+  } catch {
+    return {};
+  }
+}
+
 export default function ClientesToolbar({
   busca,
   setBusca,
@@ -32,6 +41,17 @@ export default function ClientesToolbar({
   setFiltros,
 }) {
   const [filtroAberto, setFiltroAberto] = useState(false);
+
+  useEffect(() => {
+    const inicial = carregarFiltros();
+    if (Object.keys(inicial).length > 0) {
+      setFiltros(inicial);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("clientes-filtros", JSON.stringify(filtros));
+  }, [filtros]);
 
   function handleBusca(e) {
     setBusca(e.target.value);
