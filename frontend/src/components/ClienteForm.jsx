@@ -21,6 +21,44 @@ const CAMPOS_INICIAIS = {
   motivoNaoContratado: "",
 };
 
+const CAMPOS = [
+  { name: "nome", type: "text", placeholder: "Nome completo", required: true },
+  {
+    name: "telefone",
+    type: "text",
+    placeholder: "Telefone/WhatsApp",
+    required: true,
+  },
+  { name: "ultimoContato", type: "date" },
+  {
+    name: "formaProspeccao",
+    type: "select",
+    options: FORMAS_PROSPECCAO,
+    placeholder: "Forma de prospecção",
+  },
+  {
+    name: "areaAtuacao",
+    type: "select",
+    options: AREAS_ATUACAO,
+    placeholder: "Área de atuação",
+  },
+  {
+    name: "resumoDemanda",
+    type: "textarea",
+    placeholder: "Resumo da demanda",
+  },
+  {
+    name: "resumoUltimaTratativa",
+    type: "textarea",
+    placeholder: "Resumo da última tratativa",
+  },
+  {
+    name: "motivoNaoContratado",
+    type: "textarea",
+    placeholder: "Se não contratou, qual o motivo?",
+  },
+];
+
 export default function ClienteForm({ onSubmit, clienteInicial }) {
   const [form, setForm] = useState(
     clienteInicial
@@ -41,73 +79,55 @@ export default function ClienteForm({ onSubmit, clienteInicial }) {
     onSubmit(form);
   }
 
+  function renderCampo(campo) {
+    if (campo.type === "select") {
+      return (
+        <select
+          name={campo.name}
+          value={form[campo.name]}
+          onChange={handleChange}
+        >
+          <option value="">{campo.placeholder}</option>
+          {campo.options.map((op) => (
+            <option key={op} value={op}>
+              {op}
+            </option>
+          ))}
+        </select>
+      );
+    }
+
+    if (campo.type === "textarea") {
+      return (
+        <textarea
+          name={campo.name}
+          placeholder={campo.placeholder}
+          value={form[campo.name]}
+          onChange={handleChange}
+        />
+      );
+    }
+
+    return (
+      <input
+        type={campo.type}
+        name={campo.name}
+        placeholder={campo.placeholder}
+        value={form[campo.name]}
+        onChange={handleChange}
+        required={campo.required}
+      />
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <h2>{isEdicao ? "Editar Cliente" : "Novo Cliente"}</h2>
-      <input
-        type="text"
-        name="nome"
-        placeholder="Nome completo"
-        value={form.nome}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="telefone"
-        placeholder="Telefone/WhatsApp"
-        value={form.telefone}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="date"
-        name="ultimoContato"
-        value={form.ultimoContato}
-        onChange={handleChange}
-      />
-      <select
-        name="formaProspeccao"
-        value={form.formaProspeccao}
-        onChange={handleChange}
-      >
-        <option value="">Forma de prospecção</option>
-        {FORMAS_PROSPECCAO.map((f) => (
-          <option key={f} value={f}>
-            {f}
-          </option>
-        ))}
-      </select>
-      <select
-        name="areaAtuacao"
-        value={form.areaAtuacao}
-        onChange={handleChange}
-      >
-        <option value="">Área de atuação</option>
-        {AREAS_ATUACAO.map((a) => (
-          <option key={a} value={a}>
-            {a}
-          </option>
-        ))}
-      </select>
-      <textarea
-        name="resumoDemanda"
-        placeholder="Resumo da demanda"
-        value={form.resumoDemanda}
-        onChange={handleChange}
-      />
-      <textarea
-        name="resumoUltimaTratativa"
-        placeholder="Resumo da última tratativa"
-        value={form.resumoUltimaTratativa}
-        onChange={handleChange}
-      />
-      <textarea
-        name="motivoNaoContratado"
-        placeholder="Se não contratou, qual o motivo?"
-        value={form.motivoNaoContratado}
-        onChange={handleChange}
-      />
+
+      {CAMPOS.map((campo) => (
+        <div key={campo.name}>{renderCampo(campo)}</div>
+      ))}
+
       <button type="submit">{isEdicao ? "Atualizar" : "Salvar"}</button>
     </form>
   );

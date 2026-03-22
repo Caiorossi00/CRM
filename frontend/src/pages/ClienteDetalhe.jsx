@@ -1,19 +1,19 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import ClienteHeader from "../components/cliente/ClienteHeader";
+import ClienteInfoCard from "../components/cliente/ClienteInfoCard";
+import ClienteResumoCard from "../components/cliente/ClienteResumoCard";
+import ClienteAcao from "../components/cliente/ClienteAcao";
 import "../assets/styles/ClienteDetalhe.scss";
-import { formatarData } from "../utils/dateUtils";
 
 export default function ClienteDetalhe() {
   const { id } = useParams();
   const [cliente, setCliente] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/clientes")
+    fetch(`http://localhost:3000/clientes/${id}`)
       .then((res) => res.json())
-      .then((data) => {
-        const encontrado = data.find((c) => String(c.id) === id);
-        setCliente(encontrado);
-      });
+      .then((data) => setCliente(data));
   }, [id]);
 
   if (!cliente) {
@@ -27,68 +27,46 @@ export default function ClienteDetalhe() {
     );
   }
 
-  function gerarAcaoAutomatica() {
-    alert(`(Função futura) Ação gerada para ${cliente.nome}`);
-  }
-
   return (
     <div className="detalhe-page">
-      <div className="detalhe-header">
-        <div>
-          <h1>{cliente.nome}</h1>
-          <p>Cadastrado em {formatarData(cliente.dataCadastro)}</p>
-        </div>
-        <Link to="/clientes" className="detalhe-voltar">
-          ← Voltar
-        </Link>
-      </div>
+      <ClienteHeader cliente={cliente} />
 
       <div className="detalhe-grid">
-        <div className="detalhe-card">
-          <h2>Informações de Contato</h2>
-          <div className="detalhe-campo">
-            <span className="detalhe-label">Telefone</span>
-            <span>{cliente.telefone || "—"}</span>
-          </div>
-          <div className="detalhe-campo">
-            <span className="detalhe-label">Último Contato</span>
-            <span>{formatarData(cliente.ultimoContato)}</span>
-          </div>
-        </div>
+        <ClienteInfoCard
+          titulo="Informações de Contato"
+          campos={[
+            { label: "Telefone", valor: cliente.telefone },
+            { label: "Último Contato", valor: cliente.ultimoContato },
+          ]}
+        />
 
-        <div className="detalhe-card">
-          <h2>Prospecção</h2>
-          <div className="detalhe-campo">
-            <span className="detalhe-label">Forma de Prospecção</span>
-            <span>{cliente.formaProspeccao || "—"}</span>
-          </div>
-          <div className="detalhe-campo">
-            <span className="detalhe-label">Área de Atuação</span>
-            <span>{cliente.areaAtuacao || "—"}</span>
-          </div>
-        </div>
+        <ClienteInfoCard
+          titulo="Prospecção"
+          campos={[
+            { label: "Forma de Prospecção", valor: cliente.formaProspeccao },
+            { label: "Área de Atuação", valor: cliente.areaAtuacao },
+          ]}
+        />
       </div>
 
-      <div className="detalhe-card detalhe-card--full">
-        <h2>Resumo da Demanda</h2>
-        <p>{cliente.resumoDemanda || "—"}</p>
-      </div>
+      <ClienteResumoCard
+        titulo="Resumo da Demanda"
+        texto={cliente.resumoDemanda}
+      />
 
-      <div className="detalhe-card detalhe-card--full">
-        <h2>Resumo da Última Tratativa</h2>
-        <p>{cliente.resumoUltimaTratativa || "—"}</p>
-      </div>
+      <ClienteResumoCard
+        titulo="Resumo da Última Tratativa"
+        texto={cliente.resumoUltimaTratativa}
+      />
 
       {cliente.motivoNaoContratado && (
-        <div className="detalhe-card detalhe-card--full">
-          <h2>Motivo de Não Contratação</h2>
-          <p>{cliente.motivoNaoContratado}</p>
-        </div>
+        <ClienteResumoCard
+          titulo="Motivo de Não Contratação"
+          texto={cliente.motivoNaoContratado}
+        />
       )}
 
-      <div className="detalhe-acao">
-        <button onClick={gerarAcaoAutomatica}>Executar Ação Automática</button>
-      </div>
+      <ClienteAcao cliente={cliente} />
     </div>
   );
 }
