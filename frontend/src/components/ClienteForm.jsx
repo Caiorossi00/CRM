@@ -1,88 +1,11 @@
 import { useState } from "react";
 import "../assets/styles/ClienteForm.scss";
-
-const FORMAS_PROSPECCAO = ["Indicação", "Instagram", "Youtube", "Networking"];
-const AREAS_ATUACAO = [
-  "Acidente",
-  "PSDD",
-  "Veículo não transferido",
-  "Indicação de condutor",
-];
-
-const CAMPOS_INICIAIS = {
-  nome: "",
-  telefone: "",
-  primeiroContato: "",
-  ultimoContato: "",
-  formaProspeccao: "",
-  areaAtuacao: "",
-  resumoDemanda: "",
-  resumoUltimaTratativa: "",
-  motivoNaoContratado: "",
-};
-
-const CAMPOS = [
-  { name: "nome", label: "Nome", type: "text", required: true },
-  {
-    name: "telefone",
-    label: "Telefone/WhatsApp",
-    type: "text",
-    required: true,
-  },
-  { name: "ultimoContato", label: "Último contato", type: "date" },
-  {
-    name: "formaProspeccao",
-    label: "Forma de prospecção",
-    type: "select",
-    options: FORMAS_PROSPECCAO,
-  },
-  {
-    name: "areaAtuacao",
-    label: "Área de atuação",
-    type: "select",
-    options: AREAS_ATUACAO,
-  },
-  { name: "resumoDemanda", label: "Resumo da demanda", type: "textarea" },
-  {
-    name: "motivoNaoContratado",
-    label: "Motivo de não contratação",
-    type: "textarea",
-  },
-];
-
-const TRATATIVAS = [
-  {
-    label: "Qualificação inicial",
-    value: "Qualificação",
-    className: "tratativa-qualificacao",
-  },
-  { label: "Proposta", value: "Proposta", className: "tratativa-proposta" },
-  {
-    label: "Contratação",
-    value: "Contratacao",
-    className: "tratativa-contratacao",
-  },
-  {
-    label: "Fechado (Advocacia)",
-    value: "Fechado (advocacia)",
-    className: "tratativa-fechado-advocacia",
-  },
-  {
-    label: "Fechado (Consultoria)",
-    value: "Fechado (consultoria)",
-    className: "tratativa-fechado-consultoria",
-  },
-  {
-    label: "Oportunidade perdida",
-    value: "Oportunidade Perdida",
-    className: "tratativa-oportunidade-perdida",
-  },
-  {
-    label: "Encaminhado p/ parceria",
-    value: "Encaminhado p/ Parceria",
-    className: "tratativa-encaminhado-parceria",
-  },
-];
+import {
+  CAMPOS,
+  CAMPOS_INICIAIS,
+  TRATATIVAS,
+  MOTIVOS,
+} from "../assets/data/clienteData";
 
 export default function ClienteForm({ onSubmit, clienteInicial }) {
   const [form, setForm] = useState(
@@ -116,14 +39,12 @@ export default function ClienteForm({ onSubmit, clienteInicial }) {
   }
 
   function renderCampo(campo) {
-    const id = campo.name;
-
     if (campo.name === "resumoUltimaTratativa") {
       return (
         <div className="form-group">
-          <label htmlFor={id}>{campo.label}</label>
+          <label htmlFor={campo.name}>{campo.label}</label>
           <select
-            id={id}
+            id={campo.name}
             name={campo.name}
             value={form[campo.name]}
             onChange={handleChange}
@@ -141,12 +62,35 @@ export default function ClienteForm({ onSubmit, clienteInicial }) {
       );
     }
 
+    if (campo.name === "motivoNaoContratado") {
+      return (
+        <div className="form-group">
+          <label htmlFor={campo.name}>{campo.label}</label>
+          <select
+            id={campo.name}
+            name={campo.name}
+            value={form[campo.name]}
+            onChange={handleChange}
+          >
+            <option value="" disabled>
+              Selecione
+            </option>
+            {MOTIVOS.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+        </div>
+      );
+    }
+
     if (campo.type === "select") {
       return (
         <div className="form-group">
-          <label htmlFor={id}>{campo.label}</label>
+          <label htmlFor={campo.name}>{campo.label}</label>
           <select
-            id={id}
+            id={campo.name}
             name={campo.name}
             value={form[campo.name]}
             onChange={handleChange}
@@ -167,9 +111,9 @@ export default function ClienteForm({ onSubmit, clienteInicial }) {
     if (campo.type === "textarea") {
       return (
         <div className="form-group">
-          <label htmlFor={id}>{campo.label}</label>
+          <label htmlFor={campo.name}>{campo.label}</label>
           <textarea
-            id={id}
+            id={campo.name}
             name={campo.name}
             value={form[campo.name]}
             onChange={handleChange}
@@ -180,9 +124,9 @@ export default function ClienteForm({ onSubmit, clienteInicial }) {
 
     return (
       <div className="form-group">
-        <label htmlFor={id}>{campo.label}</label>
+        <label htmlFor={campo.name}>{campo.label}</label>
         <input
-          id={id}
+          id={campo.name}
           type={campo.type}
           name={campo.name}
           value={form[campo.name]}
@@ -193,15 +137,24 @@ export default function ClienteForm({ onSubmit, clienteInicial }) {
     );
   }
 
+  const camposParaRender = CAMPOS.concat([
+    {
+      name: "resumoUltimaTratativa",
+      label: "Resumo da Última Tratativa",
+      type: "select",
+    },
+    {
+      name: "motivoNaoContratado",
+      label: "Motivo de não contratação",
+      type: "select",
+    },
+  ]);
+
   return (
     <form onSubmit={handleSubmit}>
       <h2>{isEdicao ? "Editar Cliente" : "Novo Cliente"}</h2>
       {error && <p className="form-error">{error}</p>}
-      {CAMPOS.concat({
-        name: "resumoUltimaTratativa",
-        label: "Resumo da Última Tratativa",
-        type: "select",
-      }).map((campo) => (
+      {camposParaRender.map((campo) => (
         <div key={campo.name}>{renderCampo(campo)}</div>
       ))}
       <button type="submit" disabled={loading}>
