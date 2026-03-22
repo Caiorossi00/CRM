@@ -1,9 +1,11 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ClienteHeader from "../components/clients/details/ClienteHeader";
 import ClienteInfoCard from "../components/clients/details/ClienteInfoCard";
 import ClienteResumoCard from "../components/clients/details/ClienteResumoCard";
 import ClienteAcao from "../components/clients/details/ClienteAcao";
+import LoadingSpinner from "../components/LoadingSpinner";
+import StatusPage from "../components/StatusPage";
 import { getClienteById } from "../services/clientesService";
 import "../assets/styles/ClienteDetalhe.scss";
 
@@ -18,7 +20,6 @@ export default function ClienteDetalhe() {
       try {
         setLoading(true);
         setError(null);
-
         const data = await getClienteById(id);
         setCliente(data);
       } catch (err) {
@@ -28,40 +29,18 @@ export default function ClienteDetalhe() {
         setLoading(false);
       }
     }
-
     carregarCliente();
   }, [id]);
 
-  if (loading) {
-    return <p>Carregando...</p>;
-  }
-
-  if (error) {
-    return (
-      <div className="detalhe-page">
-        <p className="detalhe-nao-encontrado">Erro: {error}</p>
-        <Link to="/clientes" className="detalhe-voltar">
-          ← Voltar
-        </Link>
-      </div>
-    );
-  }
-
-  if (!cliente) {
-    return (
-      <div className="detalhe-page">
-        <p className="detalhe-nao-encontrado">Cliente não encontrado.</p>
-        <Link to="/clientes" className="detalhe-voltar">
-          ← Voltar
-        </Link>
-      </div>
-    );
-  }
+  if (loading) return <LoadingSpinner />;
+  if (error)
+    return <StatusPage mensagem={`Erro: ${error}`} voltar="/clientes" />;
+  if (!cliente)
+    return <StatusPage mensagem="Cliente não encontrado." voltar="/clientes" />;
 
   return (
     <div className="detalhe-page">
       <ClienteHeader cliente={cliente} />
-
       <div className="detalhe-grid">
         <ClienteInfoCard
           titulo="Informações de Contato"
@@ -70,7 +49,6 @@ export default function ClienteDetalhe() {
             { label: "Último Contato", valor: cliente.ultimoContato },
           ]}
         />
-
         <ClienteInfoCard
           titulo="Prospecção"
           campos={[
@@ -79,24 +57,20 @@ export default function ClienteDetalhe() {
           ]}
         />
       </div>
-
       <ClienteResumoCard
         titulo="Resumo da Demanda"
         texto={cliente.resumoDemanda}
       />
-
       <ClienteResumoCard
         titulo="Resumo da Última Tratativa"
         texto={cliente.resumoUltimaTratativa}
       />
-
       {cliente.motivoNaoContratado && (
         <ClienteResumoCard
           titulo="Motivo de Não Contratação"
           texto={cliente.motivoNaoContratado}
         />
       )}
-
       <ClienteAcao cliente={cliente} />
     </div>
   );

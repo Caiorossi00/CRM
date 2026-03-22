@@ -1,0 +1,23 @@
+.status-page {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 32px;
+
+  &__mensagem {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  &__voltar {
+    font-size: 13px;
+    color: #2563eb;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
