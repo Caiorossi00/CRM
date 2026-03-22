@@ -1,0 +1,34 @@
+#sidebar-container {
+  width: fit-content;
+  background-color: #153156;
+  padding-right: 3vw;
+  padding-left: 1.5vw;
+  padding-top: 5vh;
+  color: white;
+  text-align: center;
+
+  .fa-scale-balanced {
+    margin-bottom: 4vh;
+    color: #688ec0;
+    font-size: 2em;
+  }
+}
+
+.btns-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.bar-btn {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  button {
+    border: none;
+    background-color: transparent;
+    font-size: 1em;
+    color: white;
+  }
+}
