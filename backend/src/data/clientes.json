@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "nome": "João Silva",
+    "telefone": "99999-9999",
+    "primeiroContato": "2026-03-20",
+    "ultimoContato": "2026-03-21",
+    "formaProspeccao": "Instagram",
+    "areaAtuacao": "Acidente",
+    "resumoDemanda": "Cliente relatou acidente de trânsito.",
+    "resumoUltimaTratativa": "Orientado sobre documentação.",
+    "motivoNaoContratado": "Lorem"
+  },
+  {
+    "id": 1774143965136,
+    "nome": "Loreme23e23",
+    "telefone": "isdoai",
+    "primeiroContato": "",
+    "ultimoContato": "2442-03-09",
+    "formaProspeccao": "Indicação",
+    "areaAtuacao": "PSDD",
+    "resumoDemanda": "diweojioej",
+    "resumoUltimaTratativa": "dwedpowek",
+    "motivoNaoContratado": "dewopdkop",
+    "dataCadastro": "2026-03-22T01:46:05.136Z"
+  }
+]
