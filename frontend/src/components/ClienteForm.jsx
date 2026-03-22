@@ -66,6 +66,9 @@ export default function ClienteForm({ onSubmit, clienteInicial }) {
       : CAMPOS_INICIAIS,
   );
 
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const isEdicao = Boolean(clienteInicial);
 
   function handleChange(e) {
@@ -73,10 +76,21 @@ export default function ClienteForm({ onSubmit, clienteInicial }) {
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+
     if (!form.nome || !form.telefone) return;
-    onSubmit(form);
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      await onSubmit(form);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   function renderCampo(campo) {
@@ -124,11 +138,15 @@ export default function ClienteForm({ onSubmit, clienteInicial }) {
     <form onSubmit={handleSubmit}>
       <h2>{isEdicao ? "Editar Cliente" : "Novo Cliente"}</h2>
 
+      {error && <p className="form-error">{error}</p>}
+
       {CAMPOS.map((campo) => (
         <div key={campo.name}>{renderCampo(campo)}</div>
       ))}
 
-      <button type="submit">{isEdicao ? "Atualizar" : "Salvar"}</button>
+      <button type="submit" disabled={loading}>
+        {loading ? "Salvando..." : isEdicao ? "Atualizar" : "Salvar"}
+      </button>
     </form>
   );
 }
