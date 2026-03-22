@@ -11,7 +11,7 @@ const TRATATIVAS = {
   "Fechado (advocacia)": "#246e1d",
   "Fechado (consultoria)": "#246e1d",
   "Oportunidade Perdida": "#f13a2d",
-  "Encaminhado p/ Parceria": "#d8c976",
+  "Encaminhado p/ Parceria": "#e7ce3f",
 };
 
 export default function ClienteRow({ cliente, onEditar, onExcluir }) {
@@ -43,18 +43,14 @@ export default function ClienteRow({ cliente, onEditar, onExcluir }) {
       <td>{cliente.areaAtuacao}</td>
       <td className="td-resumo">{cliente.resumoDemanda}</td>
       <td className="td-resumo">
-        <div
-          className="tratativa-quadrado"
+        <span
+          className="tratativa-destacada"
           style={{
             backgroundColor: corTratativa,
-            width: "12px",
-            height: "12px",
-            display: "inline-block",
-            marginRight: "6px",
-            borderRadius: "2px",
           }}
-        />
-        {cliente.resumoUltimaTratativa}
+        >
+          {cliente.resumoUltimaTratativa}
+        </span>
       </td>
       <td className="td-resumo">{cliente.motivoNaoContratado}</td>
       <td className="acoes-cell">
