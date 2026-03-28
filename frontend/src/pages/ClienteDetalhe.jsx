@@ -82,7 +82,7 @@ export default function ClienteDetalhe() {
               />
             </div>
 
-            <div className="bento-full">
+            <div className="bento-2">
               <ClienteDocumentosCard
                 documentos={detalhes.documentos || []}
                 onAdd={addDocumento}

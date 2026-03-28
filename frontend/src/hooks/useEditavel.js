@@ -1,28 +1,47 @@
 import { useState, useEffect } from "react";
 
-export default function useEditavel(valorInicial, onSave) {
+export default function useEditavelLista(valorInicial = [], onSave) {
   const [editando, setEditando] = useState(false);
-  const [valor, setValor] = useState(valorInicial || "");
+  const [lista, setLista] = useState(valorInicial);
 
   useEffect(() => {
-    setValor(valorInicial || "");
+    setLista(valorInicial || []);
   }, [valorInicial]);
 
+  function adicionar() {
+    setLista((prev) => [...prev, { id: Date.now(), texto: "" }]);
+  }
+
+  function atualizar(id, texto) {
+    setLista((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, texto } : item))
+    );
+  }
+
+  function remover(id) {
+    setLista((prev) => prev.filter((item) => item.id !== id));
+  }
+
   function salvar() {
-    onSave && onSave(valor);
+    const limpa = lista.filter(
+      (item) => item.texto && item.texto.trim() !== ""
+    );
+    onSave && onSave(limpa);
     setEditando(false);
   }
 
   function cancelar() {
-    setValor(valorInicial || "");
+    setLista(valorInicial || []);
     setEditando(false);
   }
 
   return {
     editando,
-    valor,
-    setValor,
+    lista,
     setEditando,
+    adicionar,
+    atualizar,
+    remover,
     salvar,
     cancelar,
   };

@@ -36,8 +36,8 @@
 
 .detalhe-bento {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
@@ -93,6 +93,20 @@
     margin: 0;
     line-height: 1.5;
     white-space: pre-wrap;
+  }
+
+  button {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    color: #374151;
+    cursor: pointer;
+
+    &:hover {
+      background: #f3f4f6;
+    }
   }
 }
 

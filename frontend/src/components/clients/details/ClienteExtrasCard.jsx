@@ -1,29 +1,60 @@
-import useEditavel from "../../../hooks/useEditavel";
+import useEditavelLista from "../../../hooks/useEditavel";
+import "../../../assets/styles/ClienteExtrasCard.scss";
 
-export default function ClienteExtrasCard({ valor, onSave }) {
+export default function ClienteExtrasCard({ valor = [], onSave }) {
   const {
     editando,
-    valor: texto,
-    setValor,
+    lista,
     setEditando,
+    adicionar,
+    atualizar,
+    remover,
     salvar,
     cancelar,
-  } = useEditavel(valor, onSave);
+  } = useEditavelLista(valor, onSave);
 
   return (
     <div className="detalhe-card">
-      <h2>Informações Extras</h2>
+      <div className="detalhe-header-inline">
+        <h2>Informações Extras</h2>
+        {!editando && <button onClick={() => setEditando(true)}>Editar</button>}
+      </div>
 
       {editando ? (
         <>
-          <textarea value={texto} onChange={(e) => setValor(e.target.value)} />
-          <button onClick={salvar}>Salvar</button>
-          <button onClick={cancelar}>Cancelar</button>
+          <div className="extras-lista">
+            {lista.map((item) => (
+              <div key={item.id} className="extra-item">
+                <input
+                  type="text"
+                  value={item.texto}
+                  onChange={(e) => atualizar(item.id, e.target.value)}
+                />
+                <button onClick={() => remover(item.id)}>x</button>
+              </div>
+            ))}
+          </div>
+
+          <button className="extra-add" onClick={adicionar}>
+            + Adicionar
+          </button>
+
+          <div className="extra-actions">
+            <button onClick={salvar}>Salvar</button>
+            <button onClick={cancelar}>Cancelar</button>
+          </div>
         </>
       ) : (
         <>
-          <p>{valor || "—"}</p>
-          <button onClick={() => setEditando(true)}>Editar</button>
+          {lista.length > 0 ? (
+            <ul className="extras-view">
+              {lista.map((item) => (
+                <li key={item.id}>{item.texto}</li>
+              ))}
+            </ul>
+          ) : (
+            <p></p>
+          )}
         </>
       )}
     </div>

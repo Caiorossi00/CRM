@@ -1,14 +1,6 @@
 {
   "clienteId": 1774183788763,
-
-  "informacoesExtras": "",
-
+  "informacoesExtras": [],
   "documentos": [],
-
-  "primeiroContato": null,
-
-  "controle": {
-    "criadoEm": null,
-    "atualizadoEm": null
-  }
+  "primeiroContato": null
 }
