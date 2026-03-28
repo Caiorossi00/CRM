@@ -1,0 +1,64 @@
+{
+  "clienteId": 1774183788763,
+
+  "informacoesAdicionais": "",
+  "observacoesInternas": "",
+  "transcricaoCompleta": "",
+
+  "dadosEvento": {
+    "data": "",
+    "hora": "",
+    "local": "",
+    "descricao": "",
+    "temBafometro": null,
+    "foiNotificado": null,
+    "existeProcesso": null
+  },
+
+  "prejuizos": {
+    "descricao": "",
+    "valorEstimado": 0
+  },
+
+  "impactoCliente": {
+    "descricao": ""
+  },
+
+  "dadosAdministrativos": {
+    "orgao": "",
+    "numeroAuto": "",
+    "artigo": ""
+  },
+
+  "decisoesJuridicas": {
+    "danoMoral": false,
+    "danoMaterial": false,
+    "danoEstetico": false,
+    "outros": ""
+  },
+
+  "analiseInterna": {
+    "estrategia": "",
+    "observacoes": ""
+  },
+
+  "dadosComplementares": {
+    "cpf": "",
+    "rg": "",
+    "email": "",
+    "profissao": ""
+  },
+
+  "datas": {
+    "dataContratacao": null
+  },
+
+  "metricas": {
+    "tempoAteFechamentoDias": null
+  },
+
+  "controle": {
+    "criadoEm": "",
+    "atualizadoEm": ""
+  }
+}
