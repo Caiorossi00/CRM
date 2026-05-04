@@ -1,65 +1,50 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import prisma from '../lib/prisma.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const dataPath = path.join(__dirname, "../data/clientes.json");
-
-function lerClientes() {
-  const data = fs.readFileSync(dataPath);
-  return JSON.parse(data);
+function parseDate(date) {
+  if (!date) return null;
+  const parsed = new Date(date);
+  return isNaN(parsed.getTime()) ? null : parsed;
 }
 
-function salvarClientes(clientes) {
-  fs.writeFileSync(dataPath, JSON.stringify(clientes, null, 2));
+export async function getAllClientes() {
+  return prisma.cliente.findMany({
+    orderBy: { id: 'desc' },
+  });
 }
 
-export function getAllClientes() {
-  return lerClientes();
+export async function getClienteById(id) {
+  return prisma.cliente.findUnique({
+    where: { id: Number(id) },
+  });
 }
 
-export function getClienteById(id) {
-  const clientes = lerClientes();
-  return clientes.find((c) => c.id === Number(id));
+export async function createCliente(data) {
+  return prisma.cliente.create({
+    data: {
+      ...data,
+      primeiroContato: parseDate(data.primeiroContato),
+      ultimoContato: parseDate(data.ultimoContato),
+    },
+  });
 }
 
-export function createCliente(data) {
-  const clientes = lerClientes();
-
-  const novoCliente = {
-    id: Date.now(),
-    ...data,
-    dataCadastro: new Date().toISOString(),
-  };
-
-  clientes.push(novoCliente);
-  salvarClientes(clientes);
-
-  return novoCliente;
+export async function updateCliente(id, data) {
+  try {
+    return await prisma.cliente.update({
+      where: { id: Number(id) },
+      data: {
+        ...data,
+        primeiroContato: parseDate(data.primeiroContato),
+        ultimoContato: parseDate(data.ultimoContato),
+      },
+    });
+  } catch {
+    return null;
+  }
 }
 
-export function updateCliente(id, data) {
-  const clientes = lerClientes();
-  const index = clientes.findIndex((c) => c.id === Number(id));
-  if (index === -1) return null;
-
-  const { id: _id, dataCadastro: _dataCadastro, ...dadosPermitidos } = data;
-
-  clientes[index] = {
-    ...clientes[index],
-    ...dadosPermitidos,
-  };
-  salvarClientes(clientes);
-  return clientes[index];
-}
-
-export function deleteCliente(id) {
-  const clientes = lerClientes();
-  const novosClientes = clientes.filter((c) => c.id !== Number(id));
-
-  salvarClientes(novosClientes);
-
-  return true;
+export async function deleteCliente(id) {
+  await prisma.cliente.delete({
+    where: { id: Number(id) },
+  });
 }
