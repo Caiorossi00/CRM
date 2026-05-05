@@ -3,20 +3,41 @@ datasource db {
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+  provider = "prisma-client-js"
 }
 
 model Cliente {
-  id                     Int      @id @default(autoincrement())
-  nome                   String
-  telefone               String
-  primeiroContato        DateTime?
-  ultimoContato          DateTime?
-  formaProspeccao        String?
-  areaAtuacao            String?
-  resumoDemanda          String?
-  resumoUltimaTratativa  String?
-  motivoNaoContratado    String?
-  dataCadastro           DateTime @default(now())
+  id                    Int        @id @default(autoincrement())
+  nome                  String
+  telefone              String
+  primeiroContato       DateTime?
+  ultimoContato         DateTime?
+  formaProspeccao       String?
+  areaAtuacao           String?
+  resumoDemanda         String?
+  resumoUltimaTratativa String?
+  motivoNaoContratado   String?
+  dataCadastro          DateTime   @default(now())
+
+  notas                 Nota[]
+  documentos            Documento[]
+}
+
+model Nota {
+  id         Int      @id @default(autoincrement())
+  clienteId  Int
+  conteudo   String
+  criadoEm   DateTime @default(now())
+
+  cliente    Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+}
+
+model Documento {
+  id         Int      @id @default(autoincrement())
+  clienteId  Int
+  url        String
+  nome       String?
+  criadoEm   DateTime @default(now())
+
+  cliente    Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
 }
