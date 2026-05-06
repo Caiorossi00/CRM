@@ -7,37 +7,126 @@ generator client {
 }
 
 model Cliente {
-  id                    Int        @id @default(autoincrement())
+  id                    Int                     @id @default(autoincrement())
   nome                  String
   telefone              String
-  primeiroContato       DateTime?
-  ultimoContato         DateTime?
+
+  statusId              Int?
+  status                TratativaStatus?        @relation(fields: [statusId], references: [id])
+
+  motivoNaoContratadoId Int?
+  motivoNaoContratado   MotivoNaoContratado?   @relation(fields: [motivoNaoContratadoId], references: [id])
+
   formaProspeccao       String?
-  areaAtuacao           String?
   resumoDemanda         String?
   resumoUltimaTratativa String?
-  motivoNaoContratado   String?
-  dataCadastro          DateTime   @default(now())
+  observacoes           String?
+  cpf                   String?
+  rg                    String?
+  email                 String?
 
-  notas                 Nota[]
+  primeiroContato       DateTime?
+  ultimoContato         DateTime?
+
+  dataCadastro          DateTime                @default(now())
+  atualizadoEm          DateTime                @default(now()) @updatedAt
+
+  areaAtuacaoId         Int?
+  areaAtuacao           AreaAtuacao?            @relation(fields: [areaAtuacaoId], references: [id])
+
+  atendimentos          Atendimento[]
   documentos            Documento[]
+  followUps             FollowUp[]
+  checklist             ChecklistItem[]
 }
 
-model Nota {
-  id         Int      @id @default(autoincrement())
-  clienteId  Int
-  conteudo   String
-  criadoEm   DateTime @default(now())
+model AreaAtuacao {
+  id           Int              @id @default(autoincrement())
+  nome         String           @unique
+  ativo        Boolean          @default(true)
+  criadoEm     DateTime         @default(now())
+  atualizadoEm DateTime         @updatedAt
 
-  cliente    Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  clientes     Cliente[]
+  checklist    ChecklistItem[]
+}
+
+model TratativaStatus {
+  id           Int              @id @default(autoincrement())
+  nome         String           @unique
+  cor           String?
+  ativo        Boolean          @default(true)
+  criadoEm     DateTime         @default(now())
+  atualizadoEm DateTime         @updatedAt
+
+  clientes     Cliente[]
+}
+
+model MotivoNaoContratado {
+  id           Int              @id @default(autoincrement())
+  nome         String           @unique
+  ativo        Boolean          @default(true)
+  criadoEm     DateTime         @default(now())
+  atualizadoEm DateTime         @updatedAt
+
+  clientes     Cliente[]
+}
+
+model Atendimento {
+  id           Int              @id @default(autoincrement())
+  clienteId    Int
+  cliente      Cliente          @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+
+  data         DateTime         @default(now())
+  descricao    String
+  tipo         String?
+
+  criadoEm     DateTime         @default(now())
+  atualizadoEm DateTime         @updatedAt
 }
 
 model Documento {
-  id         Int      @id @default(autoincrement())
-  clienteId  Int
-  url        String
-  nome       String?
-  criadoEm   DateTime @default(now())
+  id           Int              @id @default(autoincrement())
+  clienteId    Int
+  cliente      Cliente          @relation(fields: [clienteId], references: [id], onDelete: Cascade)
 
-  cliente    Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  titulo       String
+  url          String
+  tipo         String?
+
+  criadoEm     DateTime         @default(now())
+  atualizadoEm DateTime         @updatedAt
+}
+
+model FollowUp {
+  id               Int           @id @default(autoincrement())
+  clienteId        Int
+  cliente          Cliente       @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+
+  dataAgendada     DateTime
+  descricao        String
+  concluido        Boolean       @default(false)
+
+  tentativaMaxima  Int           @default(3)
+  tentativaAtual   Int           @default(0)
+
+  criadoEm         DateTime      @default(now())
+  atualizadoEm     DateTime      @updatedAt
+}
+
+model ChecklistItem {
+  id               Int            @id @default(autoincrement())
+
+  clienteId        Int
+  cliente          Cliente        @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+
+  areaAtuacaoId    Int?
+  areaAtuacao      AreaAtuacao?   @relation(fields: [areaAtuacaoId], references: [id])
+
+  descricao        String
+  marcado          Boolean        @default(false)
+  marcadoEm        DateTime?
+
+  criadoEm         DateTime       @default(now())
+  atualizadoEm     DateTime       @updatedAt
 }

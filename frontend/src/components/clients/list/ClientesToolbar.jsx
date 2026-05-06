@@ -1,28 +1,6 @@
 import { useState, useEffect } from "react";
-import {
-  TRATATIVAS,
-  FORMAS_PROSPECCAO,
-  AREAS_ATUACAO,
-} from "../../../assets/data/clienteData";
+import { TRATATIVAS, FORMAS_PROSPECCAO } from "../../../assets/data/clienteData";
 import "../../../assets/styles/ClientesToolbar.scss";
-
-const GRUPOS_FILTRO = [
-  {
-    label: "Tratativa",
-    campo: "resumoUltimaTratativa",
-    opcoes: TRATATIVAS.map((t) => ({ label: t.label, value: t.value })),
-  },
-  {
-    label: "Forma de Prospecção",
-    campo: "formaProspeccao",
-    opcoes: FORMAS_PROSPECCAO.map((f) => ({ label: f, value: f })),
-  },
-  {
-    label: "Área de Atuação",
-    campo: "areaAtuacao",
-    opcoes: AREAS_ATUACAO.map((a) => ({ label: a, value: a })),
-  },
-];
 
 function carregarFiltros() {
   try {
@@ -41,6 +19,7 @@ export default function ClientesToolbar({
   setFiltros,
 }) {
   const [filtroAberto, setFiltroAberto] = useState(false);
+  const [areasAtuacao, setAreasAtuacao] = useState([]);
 
   useEffect(() => {
     const inicial = carregarFiltros();
@@ -50,8 +29,33 @@ export default function ClientesToolbar({
   }, []);
 
   useEffect(() => {
+    fetch("http://localhost:3000/areas-atuacao")
+      .then((r) => r.json())
+      .then((data) => setAreasAtuacao(data))
+      .catch(() => setAreasAtuacao([]));
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem("clientes-filtros", JSON.stringify(filtros));
   }, [filtros]);
+
+  const GRUPOS_FILTRO = [
+    {
+      label: "Tratativa",
+      campo: "resumoUltimaTratativa",
+      opcoes: TRATATIVAS.map((t) => ({ label: t.label, value: t.value })),
+    },
+    {
+      label: "Forma de Prospecção",
+      campo: "formaProspeccao",
+      opcoes: FORMAS_PROSPECCAO.map((f) => ({ label: f, value: f })),
+    },
+    {
+      label: "Área de Atuação",
+      campo: "areaAtuacao",
+      opcoes: areasAtuacao.map((a) => ({ label: a.nome, value: a.nome })),
+    },
+  ];
 
   function handleBusca(e) {
     setBusca(e.target.value);
@@ -112,9 +116,7 @@ export default function ClientesToolbar({
                     <label key={op.value} className="filtro-item">
                       <input
                         type="checkbox"
-                        checked={(filtros[grupo.campo] || []).includes(
-                          op.value,
-                        )}
+                        checked={(filtros[grupo.campo] || []).includes(op.value)}
                         onChange={() => toggleFiltro(grupo.campo, op.value)}
                       />
                       {op.label}

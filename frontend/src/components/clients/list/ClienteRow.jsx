@@ -40,7 +40,7 @@ export default function ClienteRow({ cliente, onEditar, onExcluir }) {
       </td>
       <td>{formatarData(cliente.ultimoContato)}</td>
       <td>{cliente.formaProspeccao}</td>
-      <td>{cliente.areaAtuacao}</td>
+      <td>{cliente.areaAtuacao?.nome}</td>
       <td className="td-resumo">{cliente.resumoDemanda}</td>
       <td className="td-resumo">
         <span
